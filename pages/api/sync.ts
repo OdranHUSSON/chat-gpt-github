@@ -64,9 +64,12 @@ const syncRepository = async (files: any[], vaultId: string) => {
             for (let i = 0; i < lines.length; i += 100) {
                 chunks.push(lines.slice(i, i + 100).join("\n"));
             }
+            // getting the file name
+            const fileName = f.path.split('/').pop() || '';
             return chunks.map((c, i) => {
                 return {
-                    id: `${f.path}/${i}`,
+                    // including the file name in the id for better context
+                    id: `${fileName}/${f.path}/${i}`,
                     data: c,
                 };
             });
@@ -85,6 +88,7 @@ const syncRepository = async (files: any[], vaultId: string) => {
         })
     }).then(response => response.json());
 };
+
 
 // define a function to read the contents of a directory recursively
 const readDirectoryRecursive = async (files: any[], owner: string, repo: string, path: string): Promise<void> => {
